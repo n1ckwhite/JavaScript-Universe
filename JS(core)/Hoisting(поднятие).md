@@ -128,3 +128,161 @@ console.log(myConst); // Вывод: 20
 4. **Используйте `let` и `const` для предсказуемого поведения и избегайте проблем с hoisting.**  
 
 ---
+
+## ЗАДАЧИ
+
+Вот несколько задач для закрепления знаний о механизме **hoisting**:
+
+---
+
+### Задача 1: Hoisting функций
+Что выведет следующий код? Объясните почему.
+
+```javascript
+greet();
+
+function greet() {
+    console.log('Hello, World!');
+}
+
+// sayHi(); // Что произойдет, если эту строку раскомментировать?
+var sayHi = function() {
+    console.log('Hi!');
+};
+```
+
+---
+
+### Задача 2: Hoisting переменных с `var`
+Определите, что выведется в консоль:
+
+```javascript
+console.log(a);
+var a = 10;
+console.log(a);
+
+function test() {
+    console.log(b);
+    var b = 20;
+    console.log(b);
+}
+
+test();
+```
+
+---
+
+### Задача 3: Hoisting переменных с `let` и `const`
+Попробуйте угадать результат выполнения данного кода. Если возникнет ошибка, объясните, почему.
+
+```javascript
+console.log(x); 
+let x = 5;
+
+console.log(y);
+const y = 10;
+
+{
+    console.log(z);
+    let z = 15;
+}
+```
+
+---
+
+### Задача 4: Классы и hoisting
+Что произойдет при выполнении следующего кода?
+
+```javascript
+const obj = new MyClass();
+
+class MyClass {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+console.log(obj);
+```
+
+---
+
+### Задача 5: Смешанный hoisting
+Объясните поведение кода и определите, что будет выведено в консоль:
+
+```javascript
+console.log(a);
+var a = 10;
+
+function demo() {
+    console.log(b);
+    let b = 20;
+    console.log(c);
+    var c = 30;
+    console.log(d);
+}
+
+demo();
+```
+
+---
+
+### Задача 6: Практическая задача на устранение ошибок
+Дан следующий код:
+
+```javascript
+function calculateSum() {
+    return x + y;
+}
+
+var x = 5;
+let y = 10;
+
+console.log(calculateSum());
+```
+
+1. Что произойдет при выполнении кода?
+2. Исправьте ошибки, чтобы код работал корректно.
+
+---
+
+### Задача 7: Анализ TDZ
+Рассмотрите код ниже и опишите поведение:
+
+```javascript
+{
+    console.log(foo);
+    let foo = 'bar';
+
+    function testFunc() {
+        console.log(foo);
+        var foo = 'baz';
+        console.log(foo);
+    }
+
+    testFunc();
+}
+```
+
+---
+
+### Задача 8: Правильный выбор способа объявления
+Прочитайте код ниже и перепишите его так, чтобы избежать проблем с hoisting.
+
+```javascript
+function init() {
+    console.log(value);
+    if (!value) {
+        var value = 100;
+    }
+    console.log(value);
+}
+
+init();
+```
+
+---
+
+Эти задачи помогут вам глубже понять, как работает **hoisting** и как можно избежать типичных ошибок, связанных с этим механизмом.
+
+---

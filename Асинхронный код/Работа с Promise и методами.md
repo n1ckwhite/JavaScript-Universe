@@ -158,3 +158,184 @@ fetchAny();
 **Promise** — это мощный инструмент для работы с асинхронным кодом в JavaScript. Он упрощает управление асинхронными операциями, делает код более читаемым и гибким. Для более удобного управления Promise используйте методы, такие как `Promise.all`, `Promise.allSettled`, `Promise.race` и `Promise.any`. Вместе с `async/await` они обеспечивают разработчикам простой и эффективный способ работы с асинхронностью.
 
 ---
+
+## ЗАДАЧИ
+Задачи по теме "Работа с Promise и Асинхронными Операциями в JavaScript"
+
+---
+
+### Задача 1: Основы работы с Promise
+
+Посмотрите на следующий код. Что выведет в консоль?
+
+```javascript
+const myPromise = new Promise((resolve, reject) => {
+    const success = false;
+    if (success) {
+        resolve("Операция успешна!");
+    } else {
+        reject("Произошла ошибка.");
+    }
+});
+
+myPromise
+    .then(result => console.log(result)) // "Операция успешна!"
+    .catch(error => console.error(error)) // "Произошла ошибка."
+    .finally(() => console.log("Операция завершена."));
+```
+
+---
+
+### Задача 2: Перевод с `then` на `async/await`
+
+Перепишите следующий код, использующий `.then()`, на `async/await`.
+
+```javascript
+const fetchData = () => new Promise(resolve => setTimeout(() => resolve("Данные загружены"), 1000));
+
+fetchData()
+    .then(response => {
+        console.log(response); // "Данные загружены"
+    })
+    .catch(error => {
+        console.error(error);
+    })
+    .finally(() => {
+        console.log("Операция завершена.");
+    });
+```
+
+---
+
+### Задача 3: Работа с `Promise.all`
+
+Что будет выведено в консоль после выполнения следующего кода?
+
+```javascript
+const fetchData1 = () => new Promise(resolve => setTimeout(() => resolve("Данные 1"), 1000));
+const fetchData2 = () => new Promise(resolve => setTimeout(() => resolve("Данные 2"), 1500));
+const fetchData3 = () => new Promise(resolve => setTimeout(() => resolve("Данные 3"), 2000));
+
+async function fetchAllData() {
+    try {
+        const results = await Promise.all([fetchData1(), fetchData2(), fetchData3()]);
+        console.log(results); // ["Данные 1", "Данные 2", "Данные 3"]
+    } catch (error) {
+        console.error("Ошибка:", error);
+    }
+}
+
+fetchAllData();
+```
+
+---
+
+### Задача 4: Обработка ошибок с `Promise.allSettled`
+
+Как будет выглядеть результат выполнения следующего кода, если один из промисов отклонится?
+
+```javascript
+const fetchDataWithError = () => new Promise((_, reject) => setTimeout(() => reject("Ошибка!"), 1000));
+
+async function fetchAllSettled() {
+    const results = await Promise.allSettled([fetchData1(), fetchData2(), fetchDataWithError()]);
+    results.forEach((result, index) => {
+        if (result.status === "fulfilled") {
+            console.log(`Promise ${index + 1} выполнен:`, result.value);
+        } else {
+            console.error(`Promise ${index + 1} отклонён:`, result.reason);
+        }
+    });
+}
+
+fetchAllSettled();
+```
+
+---
+
+### Задача 5: Использование `Promise.race`
+
+Что выведет в консоль, если мы используем `Promise.race` для следующих промисов?
+
+```javascript
+const fetchData1 = () => new Promise(resolve => setTimeout(() => resolve("Данные 1"), 1000));
+const fetchData2 = () => new Promise(resolve => setTimeout(() => resolve("Данные 2"), 1500));
+const fetchData3 = () => new Promise(resolve => setTimeout(() => resolve("Данные 3"), 2000));
+
+async function fetchRace() {
+    try {
+        const result = await Promise.race([fetchData1(), fetchData2(), fetchData3()]);
+        console.log("Первый завершившийся Promise:", result);
+    } catch (error) {
+        console.error("Ошибка:", error);
+    }
+}
+
+fetchRace();
+```
+
+---
+
+### Задача 6: Использование `Promise.any`
+
+Что будет выведено в консоль, если один из промисов отклонится? Пример кода:
+
+```javascript
+const fetchDataWithError = () => new Promise((_, reject) => setTimeout(() => reject("Ошибка!"), 1000));
+
+async function fetchAny() {
+    try {
+        const result = await Promise.any([fetchDataWithError(), fetchData1(), fetchData2()]);
+        console.log("Первый успешный результат:", result);
+    } catch (error) {
+        console.error("Все Promise отклонены:", error);
+    }
+}
+
+fetchAny();
+```
+
+---
+
+### Задача 7: Обработка нескольких асинхронных операций
+
+Напишите функцию, которая использует `Promise.allSettled` для обработки нескольких асинхронных операций (в том числе, с ошибками) и выводит результат в консоль.
+
+---
+
+### Задача 8: Перевод с `async/await` на `.then()`
+
+Перепишите следующую функцию, использующую `async/await`, на код с `.then()`.
+
+```javascript
+async function fetchData() {
+    try {
+        const response = await new Promise(resolve => setTimeout(() => resolve("Данные загружены"), 1000));
+        console.log(response); // "Данные загружены"
+    } catch (error) {
+        console.error("Ошибка:", error);
+    } finally {
+        console.log("Операция завершена.");
+    }
+}
+
+fetchData();
+```
+
+---
+
+### Задача 9: Работа с несколькими асинхронными функциями с ошибкой
+
+Напишите код с использованием `Promise.all` для двух асинхронных операций, где одна из них будет отклонена. Что будет выведено в консоль?
+
+---
+
+### Задача 10: Преимущества использования `async/await`
+
+Объясните, почему `async/await` предпочтительнее для работы с асинхронным кодом по сравнению с использованием `.then()` и `.catch()`.
+
+---
+
+Эти задачи помогут вам лучше понять и закрепить работу с Promise и асинхронными операциями в JavaScript.
+
+---
