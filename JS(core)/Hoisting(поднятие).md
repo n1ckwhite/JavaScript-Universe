@@ -131,12 +131,13 @@ console.log(myConst); // Вывод: 20
 
 ## ЗАДАЧИ
 
-Вот несколько задач для закрепления знаний о механизме **hoisting**:
+Ниже приведены задачи для закрепления знаний о механизме **hoisting**. Вы можете попытаться решить их самостоятельно. Если не получается, в каждом разделе есть кнопка "Показать пример", чтобы посмотреть объяснение и правильное решение.
 
 ---
 
 ### Задача 1: Hoisting функций
-Что выведет следующий код? Объясните почему.
+
+**Что выведет следующий код? Объясните почему.**
 
 ```javascript
 greet();
@@ -151,10 +152,27 @@ var sayHi = function() {
 };
 ```
 
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Функция greet поднимется (hoisted), и вызов greet() сработает.
+greet(); // Выведет: Hello, World!
+
+// sayHi поднимется только как переменная (var), а не как функция.
+// Если раскомментировать строку sayHi(), будет ошибка TypeError: sayHi is not a function.
+var sayHi = function() {
+    console.log('Hi!');
+};
+```
+
+</details>
+
 ---
 
 ### Задача 2: Hoisting переменных с `var`
-Определите, что выведется в консоль:
+
+**Определите, что выведется в консоль:**
 
 ```javascript
 console.log(a);
@@ -170,10 +188,31 @@ function test() {
 test();
 ```
 
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Переменная a поднимается, но её значение будет undefined до строки присвоения.
+console.log(a); // undefined
+var a = 10;
+console.log(a); // 10
+
+function test() {
+    console.log(b); // undefined (b объявлена, но не инициализирована)
+    var b = 20;
+    console.log(b); // 20
+}
+
+test();
+```
+
+</details>
+
 ---
 
 ### Задача 3: Hoisting переменных с `let` и `const`
-Попробуйте угадать результат выполнения данного кода. Если возникнет ошибка, объясните, почему.
+
+**Попробуйте угадать результат выполнения данного кода. Если возникнет ошибка, объясните, почему.**
 
 ```javascript
 console.log(x); 
@@ -188,10 +227,21 @@ const y = 10;
 }
 ```
 
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Ошибка ReferenceError, так как переменные, объявленные с let и const, поднимаются,
+// но остаются недоступными до момента инициализации (находятся в TDZ - Temporal Dead Zone).
+```
+
+</details>
+
 ---
 
 ### Задача 4: Классы и hoisting
-Что произойдет при выполнении следующего кода?
+
+**Что произойдет при выполнении следующего кода?**
 
 ```javascript
 const obj = new MyClass();
@@ -205,10 +255,21 @@ class MyClass {
 console.log(obj);
 ```
 
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Ошибка ReferenceError: Cannot access 'MyClass' before initialization.
+// Классы также находятся в TDZ до момента их объявления.
+```
+
+</details>
+
 ---
 
 ### Задача 5: Смешанный hoisting
-Объясните поведение кода и определите, что будет выведено в консоль:
+
+**Объясните поведение кода и определите, что будет выведено в консоль:**
 
 ```javascript
 console.log(a);
@@ -225,10 +286,33 @@ function demo() {
 demo();
 ```
 
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Переменная a поднимется, но будет undefined до присвоения.
+console.log(a); // undefined
+var a = 10;
+
+// В функции demo:
+function demo() {
+    console.log(b); // Ошибка ReferenceError из-за TDZ для b.
+    let b = 20;
+
+    console.log(c); // undefined, var поднимается как undefined.
+    var c = 30;
+
+    console.log(d); // Ошибка ReferenceError, d не объявлена.
+}
+```
+
+</details>
+
 ---
 
 ### Задача 6: Практическая задача на устранение ошибок
-Дан следующий код:
+
+**Дан следующий код:**
 
 ```javascript
 function calculateSum() {
@@ -244,10 +328,31 @@ console.log(calculateSum());
 1. Что произойдет при выполнении кода?
 2. Исправьте ошибки, чтобы код работал корректно.
 
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Ошибка ReferenceError: y is not defined при вызове calculateSum().
+// Функция вызывает переменную y до её инициализации.
+
+// Исправленный код:
+var x = 5;
+let y = 10;
+
+function calculateSum() {
+    return x + y;
+}
+
+console.log(calculateSum()); // 15
+```
+
+</details>
+
 ---
 
 ### Задача 7: Анализ TDZ
-Рассмотрите код ниже и опишите поведение:
+
+**Рассмотрите код ниже и опишите поведение:**
 
 ```javascript
 {
@@ -262,6 +367,66 @@ console.log(calculateSum());
 
     testFunc();
 }
+```
+
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+{
+    console.log(foo); // Ошибка ReferenceError из-за TDZ для let foo.
+    let foo = 'bar';
+
+    function testFunc() {
+        console.log(foo); // undefined (var foo поднят внутри testFunc).
+        var foo = 'baz';
+        console.log(foo); // 'baz'
+    }
+
+    testFunc();
+}
+```
+
+</details>
+
+---
+
+### Задача 8: Правильный выбор способа объявления
+
+**Прочитайте код ниже и перепишите его так, чтобы избежать проблем с hoisting.**
+
+```javascript
+function init() {
+    console.log(value);
+    if (!value) {
+        var value = 100;
+    }
+    console.log(value);
+}
+
+init();
+```
+
+<details>
+<summary>Показать пример</summary>
+
+```javascript
+// Проблема в том, что переменная value поднимается, но становится undefined.
+// Чтобы избежать проблемы, используйте let или const:
+
+function init() {
+    let value; // Инициализируем value заранее.
+    console.log(value); // undefined
+    if (!value) {
+        value = 100;
+    }
+    console.log(value); // 100
+}
+
+init();
+```
+
+</details>
 ```
 
 ---
