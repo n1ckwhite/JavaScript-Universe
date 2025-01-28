@@ -152,11 +152,27 @@ function fetchData(callback) {
 }
 ```
 
+<details>
+<summary>Решение</summary>
+
+```javascript
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const error = Math.random() > 0.5;
+      error ? reject("Ошибка загрузки данных") : resolve("Данные успешно получены!");
+    }, 1000);
+  });
+}
+```
+
+</details>
+
 ---
 
 ### Задача 2: Сравнение подходов (Callback vs Promise)
 
-Рассмотрите следующую задачу:
+Перепишите код ниже с использованием Promise. Заметьте, как изменяется читаемость.
 
 ```javascript
 function fetchData(callback) {
@@ -179,13 +195,31 @@ fetchData((error, data) => {
 });
 ```
 
-Теперь перепишите этот код, чтобы использовать **Promise** вместо callback. Что вы заметите в улучшении читаемости?
+<details>
+<summary>Решение</summary>
+
+```javascript
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const error = Math.random() > 0.5;
+      error ? reject("Ошибка загрузки данных") : resolve("Данные успешно получены!");
+    }, 1000);
+  });
+}
+
+fetchData()
+  .then(data => console.log(data))
+  .catch(error => console.error("Произошла ошибка:", error));
+```
+
+</details>
 
 ---
 
 ### Задача 3: Преобразование Promise в async/await
 
-У вас есть код, использующий Promise. Перепишите его с использованием синтаксиса `async/await`.
+Перепишите код, использующий Promise, на `async/await`.
 
 ```javascript
 function fetchData() {
@@ -202,11 +236,36 @@ fetchData()
   .catch(error => console.error("Произошла ошибка:", error));
 ```
 
+<details>
+<summary>Решение</summary>
+
+```javascript
+async function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const success = Math.random() > 0.5;
+      success ? resolve("Данные получены!") : reject("Ошибка загрузки данных");
+    }, 1000);
+  });
+}
+
+(async () => {
+  try {
+    const data = await fetchData();
+    console.log(data);
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
+  }
+})();
+```
+
+</details>
+
 ---
 
 ### Задача 4: Обработка ошибок с Promise
 
-У вас есть код, который выполняет асинхронную операцию с использованием Promise. Напишите код, который при ошибке будет выводить сообщение "Ошибка: что-то пошло не так", используя метод `.catch()`.
+Напишите код, который при ошибке выводит сообщение "Ошибка: что-то пошло не так", используя `.catch()`.
 
 ```javascript
 function fetchData() {
@@ -226,6 +285,17 @@ fetchData()
   .then(data => console.log(data))
   .catch(error => console.error(error));
 ```
+
+<details>
+<summary>Решение</summary>
+
+```javascript
+fetchData()
+  .then(data => console.log(data))
+  .catch(() => console.error("Ошибка: что-то пошло не так"));
+```
+
+</details>
 
 ---
 
@@ -248,38 +318,86 @@ fetchData()
   .catch(error => console.error(error));
 ```
 
+<details>
+<summary>Решение</summary>
+
+```javascript
+async function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const success = Math.random() > 0.5;
+      success ? resolve("Данные успешно получены!") : reject("Ошибка загрузки данных");
+    }, 1000);
+  });
+}
+
+(async () => {
+  try {
+    const result = await fetchData();
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+})();
+```
+
+</details>
+
 ---
 
 ### Задача 6: Использование всех подходов (Callback, Promise, Async/Await)
 
-Напишите функцию, которая использует callback для асинхронной операции (например, получение данных), а затем перепишите её с использованием Promise и async/await. Для этого используйте такую асинхронную операцию:
+Напишите функцию, которая использует callback, а затем перепишите её на Promise и async/await.
 
-- Если результат операции больше 50, возвращаем успех.
-- Если результат меньше или равен 50, возвращаем ошибку.
+**Условие:** Если результат операции больше 50, возвращаем успех, иначе — ошибку.
 
----
+<details>
+<summary>Решение</summary>
 
-### Задача 7: Callback Hell
+#### Callback:
+```javascript
+function fetchData(callback) {
+  setTimeout(() => {
+    const value = Math.random() * 100;
+    value > 50 ? callback(null, value) : callback("Ошибка: значение меньше 50");
+  }, 1000);
+}
+```
 
-Представьте, что у вас есть несколько асинхронных операций, использующих callback-функции. Упростите их и избавьтесь от "callback hell". Напишите пример с использованием нескольких асинхронных операций.
+#### Promise:
+```javascript
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const value = Math.random() * 100;
+      value > 50 ? resolve(value) : reject("Ошибка: значение меньше 50");
+    }, 1000);
+  });
+}
+```
 
----
+#### Async/Await:
+```javascript
+async function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const value = Math.random() * 100;
+      value > 50 ? resolve(value) : reject("Ошибка: значение меньше 50");
+    }, 1000);
+  });
+}
 
-### Задача 8: Сравнение производительности
+(async () => {
+  try {
+    const data = await fetchData();
+    console.log("Успех:", data);
+  } catch (error) {
+    console.error(error);
+  }
+})();
+```
 
-Напишите три версии кода для одной и той же асинхронной задачи: одну с callback-функциями, одну с Promise и одну с async/await. Измерьте время выполнения каждого подхода, чтобы понять, какой из них наиболее эффективен для выполнения последовательных задач.
-
----
-
-### Задача 9: Выбор подхода для асинхронных операций
-
-У вас есть проект, в котором необходимо выполнять несколько асинхронных операций, таких как загрузка данных с сервера, обработка этих данных и сохранение их в базе данных. Какой подход — callback, Promise или async/await — вы выберете для реализации? Объясните свой выбор.
-
----
-
-### Задача 10: Преимущества и недостатки
-
-Для каждого из трех подходов (callback, Promise, async/await) перечислите его основные преимущества и недостатки. Приведите пример, где каждый из этих подходов будет особенно полезен, а также пример, где он не будет подходить.
+</details>
 
 ---
 

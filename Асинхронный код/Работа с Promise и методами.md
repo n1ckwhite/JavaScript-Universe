@@ -184,6 +184,16 @@ myPromise
     .finally(() => console.log("Операция завершена."));
 ```
 
+<details>
+<summary>Решение</summary>
+
+Вывод:
+```
+Произошла ошибка.
+Операция завершена.
+```
+</details>
+
 ---
 
 ### Задача 2: Перевод с `then` на `async/await`
@@ -204,6 +214,26 @@ fetchData()
         console.log("Операция завершена.");
     });
 ```
+
+<details>
+<summary>Решение</summary>
+
+```javascript
+const fetchData = () => new Promise(resolve => setTimeout(() => resolve("Данные загружены"), 1000));
+
+(async () => {
+    try {
+        const response = await fetchData();
+        console.log(response); // "Данные загружены"
+    } catch (error) {
+        console.error(error);
+    } finally {
+        console.log("Операция завершена.");
+    }
+})();
+```
+
+</details>
 
 ---
 
@@ -228,6 +258,17 @@ async function fetchAllData() {
 fetchAllData();
 ```
 
+<details>
+<summary>Решение</summary>
+
+Вывод:
+```
+["Данные 1", "Данные 2", "Данные 3"]
+```
+
+Все промисы выполнены успешно.
+</details>
+
 ---
 
 ### Задача 4: Обработка ошибок с `Promise.allSettled`
@@ -250,6 +291,19 @@ async function fetchAllSettled() {
 
 fetchAllSettled();
 ```
+
+<details>
+<summary>Решение</summary>
+
+Вывод:
+```
+Promise 1 выполнен: Данные 1
+Promise 2 выполнен: Данные 2
+Promise 3 отклонён: Ошибка!
+```
+
+`Promise.allSettled` обрабатывает все промисы, независимо от того, выполнены они успешно или отклонены.
+</details>
 
 ---
 
@@ -274,6 +328,17 @@ async function fetchRace() {
 fetchRace();
 ```
 
+<details>
+<summary>Решение</summary>
+
+Вывод:
+```
+Первый завершившийся Promise: Данные 1
+```
+
+`Promise.race` возвращает результат первого завершившегося промиса.
+</details>
+
 ---
 
 ### Задача 6: Использование `Promise.any`
@@ -295,11 +360,46 @@ async function fetchAny() {
 fetchAny();
 ```
 
+<details>
+<summary>Решение</summary>
+
+Вывод:
+```
+Первый успешный результат: Данные 1
+```
+
+`Promise.any` возвращает первый успешно выполненный промис, игнорируя ошибки остальных.
+</details>
+
 ---
 
 ### Задача 7: Обработка нескольких асинхронных операций
 
 Напишите функцию, которая использует `Promise.allSettled` для обработки нескольких асинхронных операций (в том числе, с ошибками) и выводит результат в консоль.
+
+<details>
+<summary>Решение</summary>
+
+```javascript
+const fetchData1 = () => new Promise(resolve => setTimeout(() => resolve("Данные 1"), 1000));
+const fetchData2 = () => new Promise(resolve => setTimeout(() => resolve("Данные 2"), 1500));
+const fetchDataWithError = () => new Promise((_, reject) => setTimeout(() => reject("Ошибка!"), 2000));
+
+async function processAllOperations() {
+    const results = await Promise.allSettled([fetchData1(), fetchData2(), fetchDataWithError()]);
+    results.forEach((result, index) => {
+        if (result.status === "fulfilled") {
+            console.log(`Операция ${index + 1} выполнена:`, result.value);
+        } else {
+            console.error(`Операция ${index + 1} завершилась с ошибкой:`, result.reason);
+        }
+    });
+}
+
+processAllOperations();
+```
+
+</details>
 
 ---
 
@@ -322,17 +422,111 @@ async function fetchData() {
 fetchData();
 ```
 
+<details>
+<summary>Решение</summary>
+
+```javascript
+const fetchData = () => new Promise(resolve => setTimeout(() => resolve("Данные загружены"), 1000));
+
+fetchData()
+    .then(response => {
+        console.log(response); // "Данные загружены"
+    })
+    .catch(error => {
+        console.error("Ошибка:", error);
+    })
+    .finally(() => {
+        console.log("Операция завершена.");
+    });
+```
+
+</details>
+
 ---
 
 ### Задача 9: Работа с несколькими асинхронными функциями с ошибкой
 
 Напишите код с использованием `Promise.all` для двух асинхронных операций, где одна из них будет отклонена. Что будет выведено в консоль?
 
+```javascript
+const fetchData1 = () => new Promise(resolve => setTimeout(() => resolve("Операция 1 успешна"), 1000));
+const fetchDataWithError = () => new Promise((_, reject) => setTimeout(() => reject("Операция 2 отклонена"), 1500));
+
+async function fetchWithAll() {
+    try {
+        const results = await Promise.all([fetchData1(), fetchDataWithError()]);
+        console.log("Результаты:", results);
+    } catch (error) {
+        console.error("Ошибка:", error);
+    }
+}
+
+fetchWithAll();
+```
+
+<details>
+<summary>Решение</summary>
+
+Вывод в консоль:
+```
+Ошибка: Операция 2 отклонена
+```
+
+Если хотя бы один из промисов отклоняется, `Promise.all` завершает выполнение с ошибкой, возвращая причину отклонения.
+</details>
+
 ---
 
-### Задача 10: Преимущества использования `async/await`
+### Задача 10: Преимущества использования async/await
 
 Объясните, почему `async/await` предпочтительнее для работы с асинхронным кодом по сравнению с использованием `.then()` и `.catch()`.
+
+<details>
+<summary>Ответ</summary>
+
+`async/await` имеет несколько преимуществ перед `.then()` и `.catch()`:
+
+1. **Повышенная читаемость**: Код становится линейным и проще для понимания, особенно если есть вложенные цепочки промисов.
+
+2. **Удобство обработки ошибок**: С помощью блока `try...catch` можно обрабатывать ошибки так же, как в синхронном коде.
+
+3. **Меньше вложенности**: Избавляет от необходимости создавать вложенные функции в цепочках `.then()`, улучшая структуру кода.
+
+4. **Естественный порядок выполнения**: Код с `async/await` легче воспринимается, так как он следует порядку выполнения задач, а не цепочке обратных вызовов.
+
+Пример сравнения:
+
+С использованием `.then()`:
+```javascript
+fetchData()
+    .then(response => {
+        return processResponse(response);
+    })
+    .then(result => {
+        console.log("Результат:", result);
+    })
+    .catch(error => {
+        console.error("Ошибка:", error);
+    });
+```
+
+С использованием `async/await`:
+```javascript
+async function processData() {
+    try {
+        const response = await fetchData();
+        const result = await processResponse(response);
+        console.log("Результат:", result);
+    } catch (error) {
+        console.error("Ошибка:", error);
+    }
+}
+
+processData();
+```
+
+`async/await` делает код более компактным и понятным.
+</details>
 
 ---
 
