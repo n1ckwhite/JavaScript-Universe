@@ -1,0 +1,11 @@
+title: "JavaScript Universe"
+description: "Полный гайд по JavaScript, React, React Native и экосистеме"
+theme: jekyll-theme-cayman
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+show_downloads: false
+github:
+  is_project_page: true
+
